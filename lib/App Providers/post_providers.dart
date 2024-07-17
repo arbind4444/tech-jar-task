@@ -15,11 +15,11 @@ class PostProvider with ChangeNotifier{
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<void> fetchPosts() async {
+  Future<void> postListing() async {
     _isLoading = true;
     notifyListeners();
 
-    _posts = await apiService.fetchPosts();
+    _posts = await apiService.getPostListing();
 
     _isLoading = false;
     notifyListeners();
