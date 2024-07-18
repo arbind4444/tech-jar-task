@@ -1,5 +1,5 @@
 class GetCommentModel {
-  int? postId;
+  dynamic postId;
   int? id;
   String? name;
   String? email;

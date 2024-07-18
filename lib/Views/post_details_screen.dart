@@ -4,11 +4,21 @@ import '../App Providers/post_providers.dart';
 
 class PostDetailsScreen extends StatelessWidget {
   final int postId;
-  const PostDetailsScreen({super.key,required this.postId});
+   PostDetailsScreen({super.key,required this.postId});
+
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _bodyController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     debugPrint("what is postId --->>>>${postId.toString()}");
+    final postProvider = Provider.of<PostProvider>(context);
+    /// Fetch comments if not already loaded
+    if (postProvider.comments.isEmpty && !postProvider.isLoading) {
+      postProvider.getCommentsListing(postId: postId);
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -27,7 +37,7 @@ class PostDetailsScreen extends StatelessWidget {
         child: Consumer<PostProvider>(
           builder: (context, postProvider, child) {
             if(postProvider.comments.isEmpty){
-              postProvider.getCommentsListing(postId);
+              postProvider.getCommentsListing(postId: postId);
             }
             if (postProvider.isLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -80,9 +90,162 @@ class PostDetailsScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint("add comments");
+          _showAddCommentDialog(context, postProvider);
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+  // void _showAddCommentDialog(BuildContext context, PostProvider postProvider) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text('Add Comment'),
+  //         content: Form(
+  //           key:_formKey,
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               TextField(
+  //                 controller: _nameController,
+  //                 decoration: const InputDecoration(labelText: 'Name'),
+  //               ),
+  //               TextField(
+  //                 controller: _emailController,
+  //                 decoration: const InputDecoration(labelText: 'Email'),
+  //               ),
+  //               TextField(
+  //                 controller: _bodyController,
+  //                 decoration: const InputDecoration(labelText: 'Comment'),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text('Cancel'),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               if(!_formKey.currentState!.validate()){
+  //
+  //               }
+  //               if (_nameController.text.isNotEmpty &&
+  //                   _emailController.text.isNotEmpty &&
+  //                   _bodyController.text.isNotEmpty) {
+  //                 postProvider.addComment(
+  //                   postId,
+  //                   _nameController.text,
+  //                   _emailController.text,
+  //                   _bodyController.text,
+  //                 ).then((_) {
+  //                   Navigator.of(context).pop();
+  //                   _nameController.clear();
+  //                   _emailController.clear();
+  //                   _bodyController.clear();
+  //                   ScaffoldMessenger.of(context).showSnackBar(
+  //                     const SnackBar(content: Text('Comment added!')),
+  //                   );
+  //                 }).catchError((error) {
+  //                   Navigator.of(context).pop();
+  //                   ScaffoldMessenger.of(context).showSnackBar(
+  //                     const SnackBar(content: Text('Failed to add comment')),
+  //                   );
+  //                 });
+  //               }
+  //             },
+  //             child: const Text('add comments'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+  void _showAddCommentDialog(BuildContext context, PostProvider postProvider) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add Comment'),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _bodyController,
+                  decoration: const InputDecoration(labelText: 'Comment'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a comment';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  postProvider.addComment(
+                    postId: postId,
+                    name: _nameController.text,
+                    email: _emailController.text,
+                    body: _bodyController.text
+                  ).then((_) {
+                    postProvider.getCommentsListing(postId: postId);
+                    Navigator.of(context).pop();
+                    _nameController.clear();
+                    _emailController.clear();
+                    _bodyController.clear();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Comment added!')),
+                    );
+                  }).catchError((error) {
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Failed to add comment')),
+                    );
+                  });
+                }
+              },
+              child: const Text('add comments'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
