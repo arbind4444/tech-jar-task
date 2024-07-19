@@ -39,8 +39,6 @@ dependencies:
   provider: ^6.1.2
   #http for network request to server
   http: ^1.2.2
-  #handle caches image load from apis
-  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:
