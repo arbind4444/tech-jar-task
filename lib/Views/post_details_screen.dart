@@ -96,7 +96,6 @@ class PostDetailsScreen extends StatelessWidget {
       ),
     );
   }
-
   void _showAddCommentDialog(BuildContext context, PostProvider postProvider) {
     showDialog(
       context: context,
@@ -157,13 +156,15 @@ class PostDetailsScreen extends StatelessWidget {
                     email: _emailController.text,
                     body: _bodyController.text
                   ).then((_) {
-                    postProvider.getCommentsListing(postId: postId);
                     Navigator.of(context).pop();
                     _nameController.clear();
                     _emailController.clear();
                     _bodyController.clear();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Comment added!')),
+                      const SnackBar( backgroundColor: Colors.green,
+                          content: Text('Comment added!'
+                          ,style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500),
+                          )),
                     );
                   }).catchError((error) {
                     Navigator.of(context).pop();
