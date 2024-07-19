@@ -48,10 +48,18 @@ class PostProvider with ChangeNotifier{
   }
 
   /// add comments by id
-
   Future<void> addComment({int? postId, String? name, String? email, String? body}) async {
-    await apiService.addCommentById(postId!, name!, email!, body!);
-    getCommentsListing(postId: postId);
+    final addComment  = await apiService.addCommentById(postId!, name!, email!, body!);
+    _comments.add(GetCommentModel(
+      id: addComment.id,
+      postId: addComment.postId,
+      body: addComment.body,
+      name: addComment.name,
+      email: addComment.email
+    ));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
 }

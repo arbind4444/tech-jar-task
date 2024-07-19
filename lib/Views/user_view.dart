@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:techjartask/Views/user_details_view.dart';
 import '../App Providers/user_providers.dart';
 
 class UserView extends StatelessWidget {
@@ -35,8 +35,12 @@ class UserView extends StatelessWidget {
                 final user = userProvider.users[index];
                 return GestureDetector(
                   onTap: (){
-                    // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                    //     PostDetailsScreen(postId: post.id!.toInt())));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserDetailScreen(userId: user.id!.toInt()),
+                      ),
+                    );
                   },
                   child: Card(
                       color: const Color(0xFFFFFFFF),

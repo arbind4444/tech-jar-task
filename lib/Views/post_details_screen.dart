@@ -96,75 +96,7 @@ class PostDetailsScreen extends StatelessWidget {
       ),
     );
   }
-  // void _showAddCommentDialog(BuildContext context, PostProvider postProvider) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title: const Text('Add Comment'),
-  //         content: Form(
-  //           key:_formKey,
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               TextField(
-  //                 controller: _nameController,
-  //                 decoration: const InputDecoration(labelText: 'Name'),
-  //               ),
-  //               TextField(
-  //                 controller: _emailController,
-  //                 decoration: const InputDecoration(labelText: 'Email'),
-  //               ),
-  //               TextField(
-  //                 controller: _bodyController,
-  //                 decoration: const InputDecoration(labelText: 'Comment'),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: const Text('Cancel'),
-  //           ),
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               if(!_formKey.currentState!.validate()){
-  //
-  //               }
-  //               if (_nameController.text.isNotEmpty &&
-  //                   _emailController.text.isNotEmpty &&
-  //                   _bodyController.text.isNotEmpty) {
-  //                 postProvider.addComment(
-  //                   postId,
-  //                   _nameController.text,
-  //                   _emailController.text,
-  //                   _bodyController.text,
-  //                 ).then((_) {
-  //                   Navigator.of(context).pop();
-  //                   _nameController.clear();
-  //                   _emailController.clear();
-  //                   _bodyController.clear();
-  //                   ScaffoldMessenger.of(context).showSnackBar(
-  //                     const SnackBar(content: Text('Comment added!')),
-  //                   );
-  //                 }).catchError((error) {
-  //                   Navigator.of(context).pop();
-  //                   ScaffoldMessenger.of(context).showSnackBar(
-  //                     const SnackBar(content: Text('Failed to add comment')),
-  //                   );
-  //                 });
-  //               }
-  //             },
-  //             child: const Text('add comments'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+
   void _showAddCommentDialog(BuildContext context, PostProvider postProvider) {
     showDialog(
       context: context,
